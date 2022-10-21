@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0
+  maximum-scale=1.0, minimum-scale=1.0">
+    <title>SampleController</title>
+</head>
+<body>
+    <h1> userinfo.html </h1>
+    <h1 th:text="'안녕하세요! ' + ${username} + '입니다.'"> 안녕하세요 "게스트" 입니다 </h1>
+    <h1 th:text="'입력된 id :  ' + ${userid}"> 아이디 </h1>
+    <h1 th:text="${useremail}"> 이메일 </h1>
+    <h1 th:text="${userhp}"> 전화번호 </h1>
+</body>
+</html>

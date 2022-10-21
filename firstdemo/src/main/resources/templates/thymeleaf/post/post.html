@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0
+  maximum-scale=1.0, minimum-scale=1.0">
+    <title>post.html</title>
+</head>
+<body>
+    <h1>Post 방식으로 전달된 값 출력</h1>
+    <h1 th:text="${membername}">멤버 이름</h1>
+    <h1 th:text="${memberid}">멤버 아이디</h1>
+    <h1 th:text="${memberemail}">멤버 이메일</h1>
+    <h1 th:text="${req}">req</h1>
+</body>
+</html>
