@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0
+  maximum-scale=1.0, minimum-scale=1.0">
+    <title>SampleController4View</title>
+</head>
+<body>
+    <div>
+        <h3 th:text="${heading}"></h3>
+        <p>사용자가 입력한 유저 정보</p>
+        <table cellpadding="10" border="1">
+
+            <tr>
+                <td>userName</td>
+                <td>
+                    <!--<input type="text" th:text="${userDTO.getUserName}">-->
+                    <input type="text" th:value="${userDTO.getUserName()}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>userId</td>
+                <td>
+                    <input type="text" th:value="${userDTO.userId}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>userPhone</td>
+                <td>
+                    <input type="text" th:value="${userDTO.getUserPhone}">
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</body>
+</html>

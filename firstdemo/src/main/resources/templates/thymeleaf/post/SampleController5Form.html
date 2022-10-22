@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0
+  maximum-scale=1.0, minimum-scale=1.0">
+    <title>SampleController5Form</title>
+    <style>
+        form > label{
+            display: inline-block;
+            width: 120px;
+        }
+        form >input {
+            padding: 4px;
+            margin-bottom: 4px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Insert New Book</h1>
+    <form action="#" th:action="@{/SampleController5View}" th:object="${bookDTO}" method="post">
+
+        <label for="title">Title</label>
+        <input type="text" th:field="*{title}">
+        <br>
+
+        <label for="author">Author</label>
+        <input type="text" th:field="*{author}">
+        <br>
+
+        <label for="publisher">Publisher</label>
+        <input type="text" th:field="*{publisher}">
+        <br>
+
+        <label for="publishingDate">PublishingDate</label>
+        <input type="date" th:field="*{publishingDate}">
+        <br>
+
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </form>
+</body>
+</html>
