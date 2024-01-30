@@ -1,8 +1,14 @@
 package com.yexample.board.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@ToString
 public class Reply extends BaseEntity{
 
     @Id
