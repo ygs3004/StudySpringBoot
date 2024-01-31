@@ -34,6 +34,7 @@ public class MemoRepositoryTest {
         });
     }
 
+
     @Test
     public void testSelect() {
         Long mno = 1L;
