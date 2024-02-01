@@ -32,4 +32,10 @@ public class BoardServiceTests {
         result.getDtoList().forEach(System.out::println);
     }
 
+    @Test
+    public void boardGetTest() {
+        BoardDTO boardDTO = boardService.get(99L);
+        System.out.println(boardDTO);
+    }
+
 }

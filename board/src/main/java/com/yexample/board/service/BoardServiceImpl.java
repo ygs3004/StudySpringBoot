@@ -30,6 +30,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public BoardDTO get(Long bno) {
+        Object[] entity = (Object[]) boardRepository.getBoardByBno(bno);
+        return entityToDTO((Board) entity[0], (Member) entity[1], (Long) entity[2]);
+    }
+
+    @Override
     public PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
         log.info("pageRequestDTO: " + pageRequestDTO);
         Function<Object[], BoardDTO> fn = entity -> entityToDTO((Board)entity[0], (Member)entity[1], (Long)entity[2]);

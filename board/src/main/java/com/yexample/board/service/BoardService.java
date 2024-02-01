@@ -10,6 +10,8 @@ public interface BoardService {
 
     Long register(BoardDTO dto);
 
+    BoardDTO get(Long bno);
+
     PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO);
 
     default Board dtoToEntity(BoardDTO dto) {
