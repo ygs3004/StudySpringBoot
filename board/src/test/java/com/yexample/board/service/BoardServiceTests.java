@@ -1,6 +1,8 @@
 package com.yexample.board.service;
 
 import com.yexample.board.dto.BoardDTO;
+import com.yexample.board.dto.PageRequestDTO;
+import com.yexample.board.dto.PageResultDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +23,13 @@ public class BoardServiceTests {
                 .build();
 
         Long bno = boardService.register(dto);
+    }
+
+    @Test
+    public void boardListTest() {
+        PageRequestDTO pageResultDTO = new PageRequestDTO();
+        PageResultDTO<BoardDTO, Object[]> result = boardService.getList(pageResultDTO);
+        result.getDtoList().forEach(System.out::println);
     }
 
 }
