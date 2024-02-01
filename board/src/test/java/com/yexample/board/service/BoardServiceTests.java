@@ -38,4 +38,9 @@ public class BoardServiceTests {
         System.out.println(boardDTO);
     }
 
+    @Test
+    public void testRemove() {
+        boardService.removeWithReplies(1L);
+    }
+
 }

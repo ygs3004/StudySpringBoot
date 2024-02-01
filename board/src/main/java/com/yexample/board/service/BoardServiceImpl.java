@@ -6,11 +6,13 @@ import com.yexample.board.dto.PageResultDTO;
 import com.yexample.board.entity.Board;
 import com.yexample.board.entity.Member;
 import com.yexample.board.repository.BoardRepository;
+import com.yexample.board.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Function;
 
@@ -20,6 +22,7 @@ import java.util.function.Function;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
 
     @Override
     public Long register(BoardDTO dto) {
@@ -41,5 +44,12 @@ public class BoardServiceImpl implements BoardService {
         Function<Object[], BoardDTO> fn = entity -> entityToDTO((Board)entity[0], (Member)entity[1], (Long)entity[2]);
         Page<Object[]> board = boardRepository.getBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by("bno").descending()));
         return new PageResultDTO<>(board, fn);
+    }
+
+    @Transactional
+    @Override
+    public void removeWithReplies(Long bno) {
+        replyRepository.deleteByBno(bno);
+        boardRepository.deleteById(bno);
     }
 }
