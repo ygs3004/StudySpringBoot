@@ -16,13 +16,15 @@ public interface BoardService {
 
     void removeWithReplies(Long bno);
 
-    default Board dtoToEntity(BoardDTO dto) {
-        Member member = Member.builder().email(dto.getWriterEmail()).build();
+    void modify(BoardDTO boardDTO);
+
+    default Board dtoToEntity(BoardDTO boardDTO) {
+        Member member = Member.builder().email(boardDTO.getWriterEmail()).build();
 
         return Board.builder()
-                .bno(dto.getBno())
-                .title(dto.getTitle())
-                .content(dto.getContent())
+                .bno(boardDTO.getBno())
+                .title(boardDTO.getTitle())
+                .content(boardDTO.getContent())
                 .writer(member)
                 .build();
     }

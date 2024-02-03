@@ -6,6 +6,7 @@ import com.yexample.board.dto.PageResultDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 public class BoardServiceTests {
@@ -36,6 +37,17 @@ public class BoardServiceTests {
     public void boardGetTest() {
         BoardDTO boardDTO = boardService.get(99L);
         System.out.println(boardDTO);
+    }
+
+    @Test
+    public void testModify() {
+        BoardDTO boardDTO = BoardDTO.builder()
+                .bno(2L)
+                .title("제목 변경")
+                .content("내용 변경")
+                .build();
+
+        boardService.modify(boardDTO);
     }
 
     @Test
