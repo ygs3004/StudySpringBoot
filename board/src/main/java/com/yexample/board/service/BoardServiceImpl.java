@@ -41,9 +41,15 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
         log.info("pageRequestDTO: " + pageRequestDTO);
-        Function<Object[], BoardDTO> fn = entity -> entityToDTO((Board)entity[0], (Member)entity[1], (Long)entity[2]);
-        Page<Object[]> board = boardRepository.getBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by("bno").descending()));
-        return new PageResultDTO<>(board, fn);
+         Function<Object[], BoardDTO> fn = entity -> entityToDTO((Board)entity[0], (Member)entity[1], (Long)entity[2]);
+
+        // Page<Object[]> board = boardRepository.getBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by("bno").descending()));
+        Page<Object[]> result = boardRepository.searchPage(
+                pageRequestDTO.getType(),
+                pageRequestDTO.getKeyword(),
+                pageRequestDTO.getPageable(Sort.by("bno").descending())
+        );
+        return new PageResultDTO<>(result, fn);
     }
 
     @Transactional
