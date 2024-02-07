@@ -29,7 +29,7 @@
             <input type="text" class="form-control" name="regDate" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
         </div>
 
-        <div class="form-group mb-5">
+        <div class="form-group mb-3">
             <label>ModDate</label>
             <input type="text" class="form-control" name="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
         </div>
@@ -41,6 +41,51 @@
         <a th:href="@{/board/list(page = ${requestDTO.page}, type=${requestDTO.type}, keyword=${requestDTO.keyword})}">
             <button type="button" class="btn btn-info">List</button>
         </a>
+
+        <div>
+            <div class="mt-4">
+                <h5><span class="badge badge-secondary replyCount">Reply Count [[${dto.replyCount}]]</span></h5>
+                <div class="list-group replyList"></div>
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+
+            const bno = [[${dto.bno}]];
+            const replyCount = $(".replyCount");
+            const listGroup = $(".replyList");
+
+            // 날짜처리 함수
+            const formatTime = (str) => {
+                const date = new Date(str);
+                return `${date.getFullYear()}/${(date.getMonth()+1)}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+            }
+
+            // 게시글 댓글처리
+            const loadJSONData = () => {
+                $.getJSON(`/replies/board/${bno}`, (arr) => {
+                    console.log("replies", arr);
+                    let str = "";
+
+                    replyCount.html(` Reply Count ${arr.length}`);
+                    $.each(arr, (idx, reply) => {
+                        console.log("reply", reply)
+                        str += `<div class="card-body" data-rno="${reply.rno}"><b>${reply.rno}</b>`
+                            + `<h5 class="card-title">${reply.text}</h5>`
+                            + `<h6 class="card-subtitle mb-2 text-muted">${reply.replyer}</h6>`
+                            + `<p class="card-text">${formatTime(reply.regDate)}</p>`
+                            + '</div>';
+                    });
+
+                    listGroup.html(str)
+                })
+            }
+
+            $(document).ready(() => {
+                loadJSONData();
+            })
+
+        </script>
     </th:block>
 </th:block>
 </html>
