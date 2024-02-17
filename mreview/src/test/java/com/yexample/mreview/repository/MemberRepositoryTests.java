@@ -4,6 +4,8 @@ import com.yexample.mreview.entity.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.IntStream;
 
@@ -12,6 +14,8 @@ public class MemberRepositoryTests {
 
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Test
     public void insertMember(){
@@ -27,6 +31,20 @@ public class MemberRepositoryTests {
             memberRepository.save(member);
         });
 
+    }
+
+    @Test
+    @Commit
+    @Transactional
+    public void testDeleteMember() {
+
+        Long mid = 2L;
+
+        Member member = Member.builder().mid(mid).build();
+
+        // 연관관계의 Delete 가 N+1 형태로 일어남 -> @Query 이용하여 DELETE 문 직접 작성이 좋음
+        reviewRepository.deleteByMember(member);
+        memberRepository.deleteById(mid);
     }
 
 }
