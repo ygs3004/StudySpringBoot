@@ -53,11 +53,32 @@
             console.log(fileInfoList);
 
             const divArea = $(".uploadResult");
+            let imageTag = "";
             fileInfoList.forEach( fileInfo => {
-                divArea.append(`<img src='/display?fileName=${fileInfo.imageURL}'>`)
-            })
+                imageTag += `<div>`;
+                imageTag += `<img src='/display?fileName=${fileInfo.thumbnailURL}'>`;
+                imageTag += `<button class='removeBtn' data-name='${fileInfo.imageURL}'>REMOVE</button> `;
+                imageTag += `</div>`;
+            });
 
+            divArea.append(imageTag);
         }
+
+        $(".uploadResult").on("click", ".removeBtn", function(e){
+            const target = $(this);
+            const fileName = target.data("name");
+            const targetDiv = target.closest("div")
+
+            console.log(fileName)
+
+            $.post("/removeFile", {fileName}, (result) => {
+                console.log("result", result);
+                if (result) {
+                    targetDiv.remove();
+                }
+            });
+
+        });
 
     </script>
 

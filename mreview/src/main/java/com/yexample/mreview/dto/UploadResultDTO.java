@@ -14,16 +14,22 @@ public class UploadResultDTO {
     private String uuid;
     private String folderPath;
     private String imageURL;
+    private String thumbnailURL;
 
     public UploadResultDTO(String fileName, String uuid, String folderPath) {
         this.fileName = fileName;
         this.uuid = uuid;
         this.folderPath = folderPath;
-        this.imageURL = convertImageURL();
+        this.imageURL = makeImageURL();
+        this.thumbnailURL = makeThumbnailURL();
     }
 
-    private String convertImageURL() {
+    private String makeImageURL() {
         return URLEncoder.encode(folderPath + "/" + uuid + "_" + fileName, StandardCharsets.UTF_8);
+    }
+
+    private String makeThumbnailURL() {
+        return URLEncoder.encode(folderPath + "/s_" + uuid + "_" + fileName, StandardCharsets.UTF_8);
     }
 
 }

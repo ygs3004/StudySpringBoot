@@ -3,6 +3,7 @@ package com.yexample.mreview.controller;
 
 import com.yexample.mreview.dto.UploadResultDTO;
 import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,7 +38,7 @@ public class UploadController {
     @GetMapping("/display")
     public ResponseEntity<byte[]> getFiles(String fileName) {
 
-        try{
+        try {
             String srcFileName = URLDecoder.decode(fileName, "UTF-8");
             log.info("decoding fileName: " + srcFileName);
             File file = new File(uploadPath + File.separator + srcFileName);
@@ -83,6 +85,14 @@ public class UploadController {
 
             try {
                 uploadFile.transferTo(savePath);
+
+                // Thumbnail 생성
+                String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_" + uuid + "_" + fileName;
+                File thumbnailFile = new File(thumbnailSaveName);
+                int thumbnailWidth = 100;
+                int thumbnailHeight = 100;
+
+                Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, thumbnailWidth, thumbnailHeight);
                 resultDTOList.add(new UploadResultDTO(fileName, uuid, folderPath));
 
             } catch (IOException e) {
@@ -104,6 +114,26 @@ public class UploadController {
             uploadPathFolder.mkdirs();
         }
         return folderPath;
+    }
+
+    @PostMapping("/removeFile")
+    public ResponseEntity<Boolean> removeFile(String fileName) {
+
+        log.info("Delete File: " + fileName);
+        String srcFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8);
+        File file = new File(uploadPath + File.separator + srcFileName);
+        boolean result = file.delete();
+        if (Boolean.FALSE.equals(result)) {
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        File thumbnail = new File(file.getParent(), "s_" + file.getName());
+        result = thumbnail.delete();
+
+        return result
+                ? new ResponseEntity<>(result, HttpStatus.OK)
+                : new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
 }
