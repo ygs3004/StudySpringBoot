@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/layout/basic:: setContent(~{this::content})}">
+
+    <th:block th:fragment="content">
+
+        <h1 class="mt-4">Movie Register Page</h1>
+
+        <form th:action="@{/movie/register}" th:method="post">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" name="title" placeholder="Enter Title">
+            </div>
+
+            <div class="mt-2 form-group fileForm">
+                <label>Image Files</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input files" id="fileInput" multiple>
+                    <label class="custom-file-label" data-browse="Browse"></label>
+                </div>
+            </div>
+
+            <div class="box">
+            </div>
+
+            <button type="submit" class="mt-4 btn btn-primary">Submit</button>
+        </form>
+
+        <script>
+            $(document).ready(function (e) {
+
+                const regex = new RegExp("(.*?)\.(exe|sh|zip|alz|tiff)$");
+                const maxSize = 10485760; // 10MB
+
+                function checkExtension(fileName, fileSize) {
+                    if (fileSize >= maxSize) {
+                        alert("파일 사이즈가 초과되었습니다.");
+                        return false;
+                    }
+
+                    if (regex.test(fileName)) {
+                        alert("해당 파일은 업로드할 수 없는 종류입니다.");
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                $(".custom-file-input").on("change", function () {
+                    const fileName = $(this).val().split("\\").pop();
+                    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+                    const formData = new FormData();
+                    const inputFile = $(this);
+                    const files = inputFile[0].files;
+                    let appended = false;
+                    if(Object.values(files).some(file => {
+                        !checkExtension(file.name, file.size)
+                        formData.append("uploadFiles", files)
+                        appended = true;
+                    })) return false;
+
+                    if(!appended) return;
+                    console.log("files", files);
+                    console.log("formData", formData);
+
+                    $.ajax({
+                        url: "/uploadAjax",
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        type: 'POST',
+                        dataType: 'json',
+                        success: (result) => {
+                            console.log(result);
+                        },
+                        error: (jqXHR, textStatus, errorThrown) => {
+                            console.log("jqXHR", jqXHR)
+                            console.log("textStatus", textStatus)
+                            console.log("errorThrown", errorThrown)
+                        },
+                    });
+                });
+
+            });
+        </script>
+
+    </th:block>
+
+</th:block>
+</html>
