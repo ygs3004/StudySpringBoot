@@ -1,12 +1,14 @@
 package com.yexample.mreview.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Data
+@NoArgsConstructor
 @Log4j2
 public class MovieImageDTO {
 

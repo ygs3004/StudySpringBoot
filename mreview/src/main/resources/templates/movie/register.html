@@ -23,16 +23,68 @@
             <div class="box">
             </div>
 
-            <button type="submit" class="mt-4 btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
 
+        <div class="uploadResult">
+            <ul>
+
+            </ul>
+        </div>
+
+        <style>
+            .uploadResult{
+                width: 100%;
+                background-color: gray;
+                margin-top: 10px;
+            }
+
+            .uploadResult ul {
+                display: flex;
+                flex-flow: row;
+                justify-content: center;
+                align-items: center;
+                vertical-align: top;
+                overflow: auto;
+            }
+
+            .uploadResult ul li{
+                list-style: none;
+                padding: 10px;
+                margin-left: 2em;
+            }
+
+            .uploadResult ul li img {
+                width: 100px;
+            }
+        </style>
+
         <script>
+
+            const showResult = (uploadResultArr) => {
+                const uploadUL = $(".uploadResult ul");
+                let str = "";
+                uploadResultArr.forEach( uploadResult => {
+                    const {fileName, folderPath, uuid, imageURL, thumbnailURL} = uploadResult;
+
+                    str += `<li data-name="${fileName}" data-path="${folderPath}" data-uuid="${uuid}">`;
+                    str += `<div>`;
+                    str += `<button type='button' data-file="${imageURL}" class="btn-warning btn-sm">X</button>`;
+                    str += `<img src="/display?fileName=${thumbnailURL}">`;
+                    str += `</div>`;
+                    str += `</li>`;
+                })
+
+                uploadUL.append(str);
+            }
+
             $(document).ready(function (e) {
 
                 const regex = new RegExp("(.*?)\.(exe|sh|zip|alz|tiff)$");
                 const maxSize = 10485760; // 10MB
 
                 function checkExtension(fileName, fileSize) {
+                    console.log("fileSize", fileSize);
                     if (fileSize >= maxSize) {
                         alert("파일 사이즈가 초과되었습니다.");
                         return false;
@@ -56,7 +108,7 @@
                     let appended = false;
                     if(Object.values(files).some(file => {
                         !checkExtension(file.name, file.size)
-                        formData.append("uploadFiles", files)
+                        formData.append("uploadFiles", file)
                         appended = true;
                     })) return false;
 
@@ -72,13 +124,51 @@
                         type: 'POST',
                         dataType: 'json',
                         success: (result) => {
-                            console.log(result);
+                            console.log("result", result);
+                            showResult(result);
                         },
                         error: (jqXHR, textStatus, errorThrown) => {
-                            console.log("jqXHR", jqXHR)
-                            console.log("textStatus", textStatus)
-                            console.log("errorThrown", errorThrown)
+                            console.log("jqXHR", jqXHR);
+                            console.log("textStatus", textStatus);
+                            console.log("errorThrown", errorThrown);
                         },
+                    });
+                });
+
+                $(".uploadResult").on("click", "li button", function (e) {
+                    console.log("Delete File");
+                    const targetFile = $(this).data("file");
+                    const targetLi = $(this).closest("li");
+
+                    $.ajax({
+                        url: "/removeFile",
+                        data: {
+                            fileName: targetFile
+                        },
+                        dataType: "text",
+                        type: "POST",
+                        success: (result) => {
+                            alert(result);
+                            targetLi.remove();
+                        }
+                    })
+                });
+
+                $(".btn-primary").on("click", function (e) {
+                    e.preventDefault();
+                    let str = "";
+
+                    $(".uploadResult li").each(function (i, obj) {
+                        const target = $(obj);
+                        console.log("obj", obj);
+                        console.log("target", target);
+
+                        str += `<input type='hidden' name="imageDTOList[${i}].imgName" value="${target.data('name')}">`;
+                        str += `<input type='hidden' name="imageDTOList[${i}].path" value="${target.data('path')}">`;
+                        str += `<input type='hidden' name="imageDTOList[${i}].uuid" value="${target.data('uuid')}">`;
+
+                        $(".box").html(str);
+                        $("form").submit();
                     });
                 });
 
