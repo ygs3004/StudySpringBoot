@@ -14,6 +14,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             "AVG(COALESCE(r.grade, 0))," +
             "COUNT(DISTINCT r)" +
             "FROM Movie m " +
+            "LEFT JOIN MovieImage mi ON mi.movie = m " +
             "LEFT JOIN Review r on r.movie = m GROUP BY m")
     Page<Object[]> getListPage(Pageable pageable);
 
