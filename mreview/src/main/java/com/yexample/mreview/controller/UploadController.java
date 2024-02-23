@@ -36,12 +36,16 @@ public class UploadController {
     private String uploadPath;
 
     @GetMapping("/display")
-    public ResponseEntity<byte[]> getFiles(String fileName) {
+    public ResponseEntity<byte[]> getFiles(String fileName, String size) {
 
         try {
             String srcFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8);
             log.info("decoding fileName: " + srcFileName);
             File file = new File(uploadPath + File.separator + srcFileName);
+
+            if(size != null && size.equals("1")){
+                file = new File(file.getParent(), file.getName().substring(2));
+            }
 
             log.info("File :" + file);
 
