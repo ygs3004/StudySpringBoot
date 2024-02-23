@@ -39,7 +39,7 @@ public class UploadController {
     public ResponseEntity<byte[]> getFiles(String fileName) {
 
         try {
-            String srcFileName = URLDecoder.decode(fileName, "UTF-8");
+            String srcFileName = URLDecoder.decode(fileName, StandardCharsets.UTF_8);
             log.info("decoding fileName: " + srcFileName);
             File file = new File(uploadPath + File.separator + srcFileName);
 

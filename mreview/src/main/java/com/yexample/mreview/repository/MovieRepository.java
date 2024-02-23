@@ -11,6 +11,7 @@ import java.util.List;
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     @Query("SELECT m," +
+            "mi, " +
             "AVG(COALESCE(r.grade, 0))," +
             "COUNT(DISTINCT r)" +
             "FROM Movie m " +

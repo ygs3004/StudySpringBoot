@@ -1,36 +1,30 @@
 package com.yexample.mreview.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+@ToString
+@Builder
+@AllArgsConstructor
 @Data
-@NoArgsConstructor
 @Log4j2
 public class MovieImageDTO {
 
     private String uuid;
     private String imgName;
     private String path;
-    private String imageURL;
-    private String thumbnailURL;
 
-    public MovieImageDTO(String imgName, String uuid, String path) {
-        this.imgName = imgName;
-        this.uuid = uuid;
-        this.path = path;
-        this.imageURL = makeImageURL();
-        this.thumbnailURL = makeThumbnailURL();
-    }
-
-    private String makeImageURL() {
+    public String getImageURL() {
         return URLEncoder.encode(path + "/" + uuid + "_" + imgName, StandardCharsets.UTF_8);
     }
 
-    private String makeThumbnailURL() {
+    public String getThumbnailURL() {
         return URLEncoder.encode(path + "/s_" + uuid + "_" + imgName, StandardCharsets.UTF_8);
     }
 

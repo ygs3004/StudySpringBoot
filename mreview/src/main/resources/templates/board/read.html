@@ -83,6 +83,21 @@
 
         <script th:inline="javascript">
 
+            let grade = 0;
+            const mno = [[${dto.mno}]];
+
+            $(".starrr").starrr({
+                rating: grade,
+                change: function (e, value) {
+                    if (value) {
+                        console.log(value);
+                        grade = value;
+                    }
+                }
+            });
+
+            $(".reviewModal").show();
+
             const bno = [[${dto.bno}]];
             const replyCount = $(".replyCount");
             const listGroup = $(".replyList");
