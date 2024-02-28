@@ -36,6 +36,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(auth -> {
             auth.requestMatchers("/sample/all").permitAll();
             auth.requestMatchers("/sample/member").hasRole("USER");
+            auth.requestMatchers("/sample/admin").hasRole("ADMIN");
         });
 
         // httpSecurity.formLogin(); -> Deprecate
