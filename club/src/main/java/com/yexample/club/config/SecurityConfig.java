@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,6 +50,10 @@ public class SecurityConfig {
         // 세션마다 생성되는 토큰값 disabled
         // 외부에서의 API 요청을 인정할때는 disabled
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.logout(logoutConfigurer -> {
+
+        });
+        httpSecurity.oauth2Login(AbstractAuthenticationFilterConfigurer::permitAll);
 
         return httpSecurity.build();
     }
