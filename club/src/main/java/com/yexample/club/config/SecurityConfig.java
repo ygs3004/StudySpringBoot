@@ -1,10 +1,10 @@
 package com.yexample.club.config;
 
+import com.yexample.club.security.handler.ClubLoginSuccessHandler;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,19 +18,6 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService() {
-//        UserDetails user = User.builder()
-//                .username("user1")
-//                .password(passwordEncoder().encode("1"))
-//                .roles("USER")
-//                .build();
-//
-//        log.info("userDetailService.............................");
-//        log.info(user);
-//        return new InMemoryUserDetailsManager(user);
-//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -56,9 +43,15 @@ public class SecurityConfig {
         });
 
         httpSecurity.oauth2Login(oAuth2LoginConfigurer -> {
+            oAuth2LoginConfigurer.successHandler(successHandler());
         });
 
         return httpSecurity.build();
+    }
+
+    @Bean
+    public ClubLoginSuccessHandler successHandler() {
+        return new ClubLoginSuccessHandler(passwordEncoder());
     }
 
 }

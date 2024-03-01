@@ -1,6 +1,5 @@
 package com.yexample.club.security.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,9 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 @Log4j2
@@ -50,6 +47,11 @@ public class ClubAuthMemberDTO extends User implements OAuth2User {
     @Override
     public Map<String, Object> getAttributes() {
         return this.attr;
+    }
+
+    @Override
+    public void eraseCredentials() {
+        // User 클래스 eraseCredentials 에서 password 정보를 지워버리므로 오버라이드 하여 password를 유지한다.
     }
 
 }

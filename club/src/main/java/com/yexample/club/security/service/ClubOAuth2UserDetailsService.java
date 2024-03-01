@@ -81,6 +81,7 @@ public class ClubOAuth2UserDetailsService extends DefaultOAuth2UserService {
                 .build();
 
         clubMember.addMemberRole(ClubMemberRole.USER);
+        log.info("saved Member: " + clubMember);
         clubMemberRepository.save(clubMember);
 
         return clubMember;
