@@ -37,6 +37,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(auth -> {
             auth.requestMatchers("/sample/all").permitAll();
             auth.requestMatchers("/sample/member").hasRole("USER");
+            auth.requestMatchers("/sample/member").hasRole("ANONYMOUS");
             auth.requestMatchers("/sample/admin").hasRole("ADMIN");
         });
 
@@ -50,10 +51,12 @@ public class SecurityConfig {
         // 세션마다 생성되는 토큰값 disabled
         // 외부에서의 API 요청을 인정할때는 disabled
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.logout(logoutConfigurer -> {
 
+        httpSecurity.logout(logoutConfigurer -> {
         });
-        httpSecurity.oauth2Login(AbstractAuthenticationFilterConfigurer::permitAll);
+
+        httpSecurity.oauth2Login(oAuth2LoginConfigurer -> {
+        });
 
         return httpSecurity.build();
     }
