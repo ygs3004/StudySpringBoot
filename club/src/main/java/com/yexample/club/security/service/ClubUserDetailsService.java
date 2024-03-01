@@ -31,7 +31,7 @@ public class ClubUserDetailsService implements UserDetailsService {
         }
 
         ClubMember clubMember = result.get();
-        log.info("========================================");
+        log.info("=================== ClubUserDetailsService clubMember =====================");
         log.info(clubMember);
 
         ClubAuthMemberDTO clubAuthMemberDTO = new ClubAuthMemberDTO(
