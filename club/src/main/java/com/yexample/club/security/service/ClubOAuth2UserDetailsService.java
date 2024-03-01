@@ -54,8 +54,12 @@ public class ClubOAuth2UserDetailsService extends DefaultOAuth2UserService {
           true,
           member.getRoleSet().stream().map(
                   role -> new SimpleGrantedAuthority("ROLE_" + ClubMemberRole.USER)
-          ).collect(Collectors.toList())
+          ).collect(Collectors.toList()),
+          oAuth2User.getAttributes()
         );
+
+
+        log.info("Social Member: " + member);
 
         clubAuthMemberDTO.setName(member.getName());
 
@@ -70,6 +74,7 @@ public class ClubOAuth2UserDetailsService extends DefaultOAuth2UserService {
         }
 
         ClubMember clubMember = ClubMember.builder()
+                .email(email)
                 .name(email)
                 .password(passwordEncoder.encode("1111"))
                 .fromSocial(true)
