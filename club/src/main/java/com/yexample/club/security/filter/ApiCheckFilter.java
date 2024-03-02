@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import net.minidev.json.JSONObject;
-import org.springframework.http.HttpStatus;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,7 +17,7 @@ import java.io.PrintWriter;
 @Log4j2
 public class ApiCheckFilter extends OncePerRequestFilter {
 
-    private AntPathMatcher antPathMatcher;
+    private final AntPathMatcher antPathMatcher;
     private String pattern;
     private JWTUtil jwtUtil;
 
