@@ -12,7 +12,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
+@ToString(exclude = "posterList")
 @Table(name = "tbl_movie")
 public class Movie extends BaseEntity{
 
