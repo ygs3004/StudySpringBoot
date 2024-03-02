@@ -1,5 +1,6 @@
 package com.yexample.club.security.filter;
 
+import com.yexample.club.security.util.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,10 +20,12 @@ public class ApiCheckFilter extends OncePerRequestFilter {
 
     private AntPathMatcher antPathMatcher;
     private String pattern;
+    private JWTUtil jwtUtil;
 
-    public ApiCheckFilter(String pattern) {
+    public ApiCheckFilter(String pattern, JWTUtil jwtUtil) {
         this.antPathMatcher = new AntPathMatcher();
         this.pattern = pattern;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -61,12 +64,16 @@ public class ApiCheckFilter extends OncePerRequestFilter {
         boolean checkResult = false;
 
         String authHeader = request.getHeader("Authorization");
+        String tokenPrefix = "Bearer ";
+        log.info("checkAuthHeader: " + authHeader);
+        int tokenStartIndex = tokenPrefix.length();
 
-        if (StringUtils.hasText(authHeader)) {
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith(tokenPrefix)) {
             log.info("Authorization exist: " + authHeader);
-            if (authHeader.equals("12345678")) {
-                checkResult = true;
-            }
+
+            String email = jwtUtil.validateAndExtract(authHeader.substring(tokenStartIndex));
+            log.info("Validate Email: " + email);
+            checkResult = email.length() > 0;
         }
 
         return checkResult;

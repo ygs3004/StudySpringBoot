@@ -18,7 +18,7 @@ public class JWTUtil {
     private SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
 
     // 1달
-    private long expire = 60 * 24 * 30;
+    private final long expire = 60 * 24 * 30;
 
     public String generateToken(String content) {
         // Key 길이에 따라 Hmac 알고리즘이 결정됨

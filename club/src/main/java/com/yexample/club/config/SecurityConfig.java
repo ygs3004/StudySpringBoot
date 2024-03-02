@@ -5,6 +5,7 @@ import com.yexample.club.security.filter.ApiLoginFilter;
 import com.yexample.club.security.handler.ApiLoginFailHandler;
 import com.yexample.club.security.handler.ClubLoginSuccessHandler;
 import com.yexample.club.security.service.ClubUserDetailsService;
+import com.yexample.club.security.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -76,14 +77,19 @@ public class SecurityConfig {
 
     @Bean
     public ApiCheckFilter apiCheckFilter() {
-        return new ApiCheckFilter("/notes/**/*");
+        return new ApiCheckFilter("/notes/**/*", jwtUtil());
     }
 
     public ApiLoginFilter apiLoginFilter(AuthenticationManager authenticationManager) {
-        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login");
+        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", jwtUtil());
         apiLoginFilter.setAuthenticationManager(authenticationManager);
         apiLoginFilter.setAuthenticationFailureHandler(new ApiLoginFailHandler());
         return apiLoginFilter;
+    }
+
+    @Bean
+    public JWTUtil jwtUtil(){
+        return new JWTUtil();
     }
 
 }

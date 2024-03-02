@@ -1,10 +1,13 @@
 package com.yexample.club.security.filter;
 
+import com.yexample.club.security.dto.ClubAuthMemberDTO;
+import com.yexample.club.security.util.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -15,8 +18,11 @@ import java.io.IOException;
 @Log4j2
 public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    public ApiLoginFilter(String defaultFilterProcessesUrl) {
+    private JWTUtil jwtUtil;
+
+    public ApiLoginFilter(String defaultFilterProcessesUrl, JWTUtil jwtUtil) {
         super(defaultFilterProcessesUrl);
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -41,6 +47,19 @@ public class ApiLoginFilter extends AbstractAuthenticationProcessingFilter {
         log.info("=================== ApiLoginFilter ===================");
         log.info("successfulAuthentication: " + authResult);
         log.info(authResult.getPrincipal());
+
+        String email = ((ClubAuthMemberDTO)authResult.getPrincipal()).getUsername();
+        try{
+            String token = jwtUtil.generateToken(email);
+            response.setContentType(MediaType.TEXT_PLAIN_VALUE);
+            response.getOutputStream().write(token.getBytes());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+
     }
 
 }
