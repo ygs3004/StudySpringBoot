@@ -39,6 +39,8 @@ dependencies {
 // https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client
     implementation 'org.springframework.security:spring-security-oauth2-client'
 
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.5'
 
 }
 
