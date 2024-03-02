@@ -52,7 +52,7 @@ public class NoteServiceImpl implements NoteService{
     @Override
     public List<NoteDTO> getAllWithWriter(String writerEmail) {
         List<Note> noteList = noteRepository.getList(writerEmail);
-        return noteList.stream().map(note -> entityToDTO(note)).collect(Collectors.toList());
+        return noteList.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
 }
