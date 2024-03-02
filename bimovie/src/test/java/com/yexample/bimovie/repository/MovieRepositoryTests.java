@@ -40,4 +40,14 @@ public class MovieRepositoryTests {
         movieRepository.save(movie);
     }
 
+    @Test
+    @Transactional
+    @Commit
+    public void testRemovePoster() {
+        log.info("Test Remove Poster.......................................");
+        Movie movie = movieRepository.getReferenceById(1L);
+        movie.removePoster(2L);
+        movieRepository.save(movie);
+    }
+
 }
