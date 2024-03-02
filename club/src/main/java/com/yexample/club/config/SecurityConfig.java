@@ -2,6 +2,7 @@ package com.yexample.club.config;
 
 import com.yexample.club.security.filter.ApiCheckFilter;
 import com.yexample.club.security.filter.ApiLoginFilter;
+import com.yexample.club.security.handler.ApiLoginFailHandler;
 import com.yexample.club.security.handler.ClubLoginSuccessHandler;
 import com.yexample.club.security.service.ClubUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +82,7 @@ public class SecurityConfig {
     public ApiLoginFilter apiLoginFilter(AuthenticationManager authenticationManager) {
         ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login");
         apiLoginFilter.setAuthenticationManager(authenticationManager);
+        apiLoginFilter.setAuthenticationFailureHandler(new ApiLoginFailHandler());
         return apiLoginFilter;
     }
 
